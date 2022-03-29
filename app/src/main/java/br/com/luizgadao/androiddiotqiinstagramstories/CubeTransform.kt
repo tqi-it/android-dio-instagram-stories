@@ -10,56 +10,38 @@ import kotlin.math.abs
 
 // ref: https://gist.github.com/delacrixmorgan/6b05ab74d1acb01b471fcc3151d70703
 class CubeTransformer : ViewPager2.PageTransformer {
-
-    private var alpha = 0f
-    private var scale = 1.0f
     private val factor = 0.28f
-    var paint = Paint()
-    var colorFilter: PorterDuffColorFilter? = null
+    private var paint = Paint()
 
     override fun transformPage(view: View, position: Float) {
         val deltaY = 0.6F
 
-        view.pivotX = if (position < 0F) view.width.toFloat() else 0F
+        if (position > 0) {
+            view.alpha = abs(1f - position)
+            view.pivotX = 0F
+        } else {
+            view.alpha  = 1f - abs(position)
+            view.pivotX = view.width.toFloat()
+        }
+
         view.pivotY = view.height * deltaY
         view.rotationY = 35F * position
 
-        if (position > 0) {
-            alpha = abs(1f - position)
-
-            val value = abs(position) * 100
-            colorFilter = applyLightness((-value).toInt())
-
-            scale = 1.0f
-            scale = (scale + (position * factor))
-        } else {
-            alpha = 1f - abs(position)
-
-            var value = (abs(position) * 100).toInt()
-            value = 100 + (100 - value) * -1
-            colorFilter = applyLightness(-value)
-
-            scale = 1.0f
-            scale = 1 + abs(position * factor)
-        }
-
-        view.alpha = alpha
-
+        val scale = 1 + abs(position * factor)
         view.scaleX = scale
         view.scaleY = scale
 
-        paint.colorFilter = colorFilter
+        val progress = (abs(position) * 100).toInt()
+        paint.colorFilter = applyLightness(progress)
         view.setLayerType(View.LAYER_TYPE_HARDWARE, paint)
     }
 
     private fun applyLightness(progress: Int): PorterDuffColorFilter {
+        val value = abs(progress) * 255 / 100
         return if (progress > 0) {
-            val value = progress * 255 / 100
-            PorterDuffColorFilter(Color.argb(value, 255, 255, 255), PorterDuff.Mode.SRC_OVER)
-        } else {
-            val value = progress * -1 * 255 / 100
             PorterDuffColorFilter(Color.argb(value, 0, 0, 0), PorterDuff.Mode.SRC_ATOP)
+        } else {
+            PorterDuffColorFilter(Color.argb(value, 255, 255, 255), PorterDuff.Mode.SRC_OVER)
         }
     }
-
 }
