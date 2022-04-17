@@ -1,20 +1,16 @@
-package br.com.luizgadao.androiddiotqiinstagramstories
+package br.com.luizgadao.androiddiotqiinstagramstories.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
+import br.com.luizgadao.androiddiotqiinstagramstories.R
+import br.com.luizgadao.androiddiotqiinstagramstories.data.Backgrounds
 
 class AdapterStories : RecyclerView.Adapter<AdapterStories.ImageViewHolder>() {
 
-    val backgrounds = listOf(
-        R.drawable.wallpaper1,
-        R.drawable.wallpaper2,
-        R.drawable.wallpaper3,
-        R.drawable.wallpaper4,
-        R.drawable.wallpaper5,
-    )
+    private val stories: List<Int> = Backgrounds().getListStories()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         val view = LayoutInflater
@@ -28,18 +24,16 @@ class AdapterStories : RecyclerView.Adapter<AdapterStories.ImageViewHolder>() {
         holder.onBind(position)
     }
 
-    override fun getItemCount() = backgrounds.size
+    override fun getItemCount() = stories.size
 
     inner class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val picture: AppCompatImageView by lazy {
+        private val picture: AppCompatImageView by lazy {
             itemView.findViewById(R.id.iv_picture)
         }
 
         fun onBind(position: Int) {
-
-
-            picture.setImageResource(backgrounds[position])
+            picture.setImageResource(stories[position])
         }
     }
 }

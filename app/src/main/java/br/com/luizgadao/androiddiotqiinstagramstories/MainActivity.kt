@@ -3,10 +3,12 @@ package br.com.luizgadao.androiddiotqiinstagramstories
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.viewpager2.widget.ViewPager2
+import br.com.luizgadao.androiddiotqiinstagramstories.adapter.AdapterStories
+import br.com.luizgadao.androiddiotqiinstagramstories.view.CubeTransformer
 
 class MainActivity : AppCompatActivity() {
 
-    val viewPager : ViewPager2 by lazy {
+    private val viewPager : ViewPager2 by lazy {
         findViewById(R.id.view_pager)
     }
 
